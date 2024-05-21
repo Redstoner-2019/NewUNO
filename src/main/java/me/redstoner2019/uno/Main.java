@@ -4,6 +4,7 @@ import me.redstoner2019.uno.client.ClientMain;
 import me.redstoner2019.uno.plugin.Plugin;
 import me.redstoner2019.uno.plugin.PluginUtils;
 import me.redstoner2019.uno.plugin.EventHandler;
+import me.redstoner2019.uno.plugin.events.LobbyCreateEvent;
 import me.redstoner2019.uno.server.ServerMain;
 import me.redstoner2019.uno.util.Logger;
 import me.redstoner2019.uno.util.Player;
@@ -72,9 +73,6 @@ public class Main {
             Card.registerCard(new Card(c,SELECT_COLOR),2);
         }
 
-        logger.log("Cards registered: " + Card.getDeck().size());
-
-
         for(File f : Objects.requireNonNull(plugins.listFiles())){
             if(f.getName().endsWith(".jar")){
                 logger.log("Plugin " + f.getName() + " found.");
@@ -104,8 +102,7 @@ public class Main {
             }
         }
         logger.log("All plugins loaded!");
-
-        logger.log("Cards registered: " + Card.getDeck().size());
+        logger.log("Cards registered in deck: " + Card.getDeck().size());
     }
 
     /**
@@ -113,10 +110,11 @@ public class Main {
      */
 
     public static void onLobbyCreateEvent(Player p, String customCode) {
+        LobbyCreateEvent event = new LobbyCreateEvent(p,customCode);
         for(Plugin plugin : activePlugins){
             logger.log("Events: " + plugin.getEvents().size());
             for(EventHandler e : plugin.getEvents()){
-                e.onLobbyCreateEvent(p,customCode);
+                e.onLobbyCreateEvent(event);
             }
         }
     }

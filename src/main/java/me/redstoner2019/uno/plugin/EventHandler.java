@@ -1,5 +1,9 @@
 package me.redstoner2019.uno.plugin;
 
+import me.redstoner2019.uno.plugin.events.LobbyCreateEvent;
+import me.redstoner2019.uno.plugin.events.LobbyCreatedEvent;
+import me.redstoner2019.uno.plugin.events.PlayerJoinLobbyEvent;
+import me.redstoner2019.uno.plugin.events.PlayerUNOEvent;
 import me.redstoner2019.uno.util.Player;
 import me.redstoner2019.uno.util.game.Card;
 import me.redstoner2019.uno.util.game.Lobby;
@@ -7,40 +11,39 @@ import me.redstoner2019.uno.util.game.Lobby;
 import java.util.List;
 
 public class EventHandler {
-    /**
-     * @param p Player that created a Lobby.
-     * @param customCode Custom Lobby code, null if it should be random
-     */
-    public boolean onLobbyCreateEvent(Player p, String customCode) {
-        return true;
+    public void onLobbyCreateEvent(LobbyCreateEvent event) {
+        return;
     }
-    public boolean lobbyCreatedEvent(Lobby lobby){
-        return true;
+    public void lobbyCreatedEvent(LobbyCreatedEvent e){
+        return;
     }
-    public boolean playerJoinLobbyEvent(Player player, Lobby lobby){
-        return true;
+    public void playerJoinLobbyEvent(PlayerJoinLobbyEvent e){
+        return;
     }
 
-    public boolean playerJoinServerEvent(Player player){
-        return true;
+    public void playerJoinServerEvent(Player player){
+        return;
     }
-    public boolean playerConnectEvent(String username){
-        return true;
+    public void playerConnectEvent(String username){
+        return;
     }
-    public boolean playerLeaveServerEvent(Player player){
-        return true;
+    public void playerLeaveServerEvent(Player player){
+        return;
     }
 
-    public boolean playerPreDrawCardsEvent(Player player, int amount){
-        return true;
+    public void playerPreDrawCardsEvent(Player player, int amount){
+        return;
     }
-    public boolean playerDrawnCardsEvent(Player player, List<Card> cards){
-        return true;
+    public void playerDrawnCardsEvent(Player player, List<Card> cards){
+        return;
     }
-    public boolean playerPutCardEvent(Player player, Card card){
-        return true;
+    public void playerPutCardEvent(Player player, Card card){
+        return;
     }
-    public boolean playerSkipTurnEvent(Player player){
-        return true;
+    public void playerSkipTurnEvent(Player player){
+        return;
+    }
+    public void playerUNOEvent(PlayerUNOEvent e){
+        return;
     }
 }
