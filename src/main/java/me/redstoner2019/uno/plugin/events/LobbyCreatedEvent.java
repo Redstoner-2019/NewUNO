@@ -2,7 +2,7 @@ package me.redstoner2019.uno.plugin.events;
 
 import me.redstoner2019.uno.util.game.Lobby;
 
-public class LobbyCreatedEvent {
+public class LobbyCreatedEvent extends Event{
     private Lobby lobby;
 
     public Lobby getLobby() {

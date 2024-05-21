@@ -1,4 +1,19 @@
 package me.redstoner2019.uno.plugin.events;
 
-public class PlayerSkipTurnEvent {
+import me.redstoner2019.uno.util.Player;
+
+public class PlayerSkipTurnEvent extends Event{
+    private Player player;
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public PlayerSkipTurnEvent(Player player) {
+        this.player = player;
+    }
 }

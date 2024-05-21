@@ -19,19 +19,19 @@ public class Logger {
     public Logger(){}
 
     public void log(String msg){
-        System.out.println(format(msg));
+        System.out.println("[OUT]" + format(msg));
     }
     public void log(Object o){
         log(o.toString());
     }
     public void warn(String msg){
-        System.err.println(format(msg));
+        System.err.println("[WARN]" + format(msg));
     }
     public void warn(Object o){
         warn(o.toString());
     }
     public void err(String msg){
-        System.err.println(format(msg));
+        System.err.println("[ERR]" + format(msg));
     }
     public void err(Object o){
         err(o.toString());

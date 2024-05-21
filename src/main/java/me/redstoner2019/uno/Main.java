@@ -3,11 +3,12 @@ package me.redstoner2019.uno;
 import me.redstoner2019.uno.client.ClientMain;
 import me.redstoner2019.uno.plugin.Plugin;
 import me.redstoner2019.uno.plugin.PluginUtils;
-import me.redstoner2019.uno.plugin.EventHandler;
+import me.redstoner2019.uno.plugin.events.Event;
+import me.redstoner2019.uno.plugin.events.EventHandler;
+import me.redstoner2019.uno.plugin.events.Listener;
 import me.redstoner2019.uno.plugin.events.LobbyCreateEvent;
 import me.redstoner2019.uno.server.ServerMain;
 import me.redstoner2019.uno.util.Logger;
-import me.redstoner2019.uno.util.Player;
 import me.redstoner2019.uno.util.Util;
 import me.redstoner2019.uno.util.game.Card;
 import me.redstoner2019.uno.util.game.CardColor;
@@ -15,6 +16,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -27,6 +30,9 @@ import static me.redstoner2019.uno.util.game.CardNumerator.*;
 public class Main {
     public static List<Plugin> activePlugins = new ArrayList<>();
     public static Logger logger = new Logger("UNO");
+    public static String getVersion(){
+        return "v2.0.0-alpha.1";
+    }
     public static void main(String[] args) {
         File plugins = new File("plugins");
         if(!plugins.exists()) if(!plugins.mkdirs()) {
@@ -42,10 +48,12 @@ public class Main {
                     case "server": {
                         ServerMain main = new ServerMain();
                         main.onEnable();
+                        break;
                     }
                     case "client": {
                         ClientMain main = new ClientMain();
                         main.onEnable();
+                        break;
                     }
                 }
             }
@@ -87,7 +95,7 @@ public class Main {
                     JSONObject o = new JSONObject(new String(inputStream.readAllBytes()));
                     Plugin plugin = (Plugin) PluginUtils.loadClass(classLoader,o.getString("main-class"));
                     if(plugin == null){
-                        logger.err("How the fuck did you manage that the plugin is null while loading plugin main...");
+                        logger.err("How the fuck did you manage that the plugin is null while loading plugin main... literally how, you just broke the matrix");
                         continue;
                     }
                     activePlugins.add(plugin);
@@ -105,16 +113,24 @@ public class Main {
         logger.log("Cards registered in deck: " + Card.getDeck().size());
     }
 
-    /**
-     * TODO: Add new events
-     */
-
-    public static void onLobbyCreateEvent(Player p, String customCode) {
-        LobbyCreateEvent event = new LobbyCreateEvent(p,customCode);
+    public static void callEvent(Event e){
         for(Plugin plugin : activePlugins){
-            logger.log("Events: " + plugin.getEvents().size());
-            for(EventHandler e : plugin.getEvents()){
-                e.onLobbyCreateEvent(event);
+            for(Listener listener : plugin.getEvents()){
+                Method[] methods = listener.getClass().getDeclaredMethods();
+                for (Method method : methods) {
+                    if (method.isAnnotationPresent(EventHandler.class)) {
+                        method.setAccessible(true);
+                        if(method.getParameterCount() == 1){
+                            if(method.getParameterTypes()[0] == e.getClass()){
+                                try {
+                                    method.invoke(listener,e);
+                                } catch (Exception ex) {
+                                    new Logger("TEST").warn("Couldnt call method");
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

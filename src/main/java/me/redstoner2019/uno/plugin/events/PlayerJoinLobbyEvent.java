@@ -3,7 +3,7 @@ package me.redstoner2019.uno.plugin.events;
 import me.redstoner2019.uno.util.Player;
 import me.redstoner2019.uno.util.game.Lobby;
 
-public class PlayerJoinLobbyEvent {
+public class PlayerJoinLobbyEvent extends Event{
     private Player player;
     private Lobby lobby;
 
