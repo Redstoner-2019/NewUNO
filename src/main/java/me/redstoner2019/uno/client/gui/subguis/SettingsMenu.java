@@ -3,13 +3,16 @@ package me.redstoner2019.uno.client.gui.subguis;
 import me.redstoner2019.api.guiapi.GUI;
 import me.redstoner2019.api.guiapi.design.Design;
 import me.redstoner2019.api.guiapi.design.Setting;
+import me.redstoner2019.api.networkingapi.util.ConnectionProtocol;
 import me.redstoner2019.uno.Main;
+import me.redstoner2019.uno.client.ClientMain;
 import me.redstoner2019.uno.client.gui.Application;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.ref.Cleaner;
 
 public class SettingsMenu extends GUI {
     public static JLabel title = new JLabel("UNO");
@@ -57,6 +60,23 @@ public class SettingsMenu extends GUI {
 
         Design.centerText(currentAuthServer);
         Design.setFontStyle(currentAuthServer, Font.PLAIN);
+
+        setNewAuthServer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ClientMain.authenticatorClient.authenticationServerIp = newAuthServerIp.getText();
+            }
+        });
+
+        connectToAuthServer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(ClientMain.authenticatorClient.isConnected()){
+                    ClientMain.authenticatorClient.disconnect();
+                }
+                ClientMain.authenticatorClient.setup();
+            }
+        });
 
         mainMenu.addActionListener(new ActionListener() {
             @Override

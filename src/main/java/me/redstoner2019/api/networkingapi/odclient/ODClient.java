@@ -1,7 +1,6 @@
 package me.redstoner2019.api.networkingapi.odclient;
 
 import me.redstoner2019.api.networkingapi.defaultpackets.ACK;
-import me.redstoner2019.api.networkingapi.defaultpackets.ConnectRequestPacket;
 import me.redstoner2019.api.networkingapi.defaultpackets.Packet;
 import me.redstoner2019.api.networkingapi.events.ConnectionFailedEvent;
 import me.redstoner2019.api.networkingapi.events.ConnectionLostEvent;
@@ -9,6 +8,7 @@ import me.redstoner2019.api.networkingapi.events.ConnectionSuccessEvent;
 import me.redstoner2019.api.networkingapi.events.PacketListener;
 import me.redstoner2019.api.networkingapi.util.ConnectionProtocol;
 import me.redstoner2019.api.networkingapi.util.Util;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
@@ -33,6 +33,7 @@ public class ODClient {
     public HashMap<String, PacketCache> packetCache = new HashMap<>();
     public List<String> deactivatedUUIDs = new ArrayList<>();
     private static final Object REFERENCE = new Object();
+    private static final String ACK = "{header: \"ACK\"}";
 
     public void setConnectionLostEvent(ConnectionLostEvent connectionLostEvent) {
         this.connectionLostEvent = connectionLostEvent;
@@ -71,7 +72,10 @@ public class ODClient {
                                     }
                                 } else if (o instanceof Packet p) {
                                     if(!deactivatedUUIDs.contains(p.uuid)){
-                                        sendObject(new ACK(p.uuid, 0));
+                                        JSONObject ack = new JSONObject();
+                                        ack.put("header","ACK");
+                                        ack.put("uuid",p.uuid);
+                                        sendObject(ack.toString());
                                         callListener(o);
                                         deactivatedUUIDs.add(p.uuid);
                                     } else {
@@ -125,7 +129,10 @@ public class ODClient {
                 }
             });
             t.start();
-            sendObject(new ConnectRequestPacket(protocol));
+            JSONObject connectRequest = new JSONObject();
+            connectRequest.put("header","connect-request");
+            connectRequest.put("protocol",protocol.name());
+            sendObject(connectRequest.toString());
         } catch (SocketException e) {
             if(connectionFailEvent != null) connectionFailEvent.onConnectionFailedEvent(e);
             System.err.println("Couldnt connect, socket exception!");

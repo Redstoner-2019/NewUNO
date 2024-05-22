@@ -1,5 +1,6 @@
 package me.redstoner2019.uno.client.gui.subguis;
 
+import me.redstoner2019.api.authapi.client.AuthenticatorClient;
 import me.redstoner2019.api.guiapi.GUI;
 import me.redstoner2019.api.guiapi.design.Design;
 import me.redstoner2019.api.guiapi.design.Setting;

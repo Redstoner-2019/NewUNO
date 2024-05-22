@@ -38,6 +38,6 @@ public class Logger {
     }
     private String format(String msg){
         Calendar calendar = Calendar.getInstance();
-        return String.format("[%02d:%02d.%03d] ",calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),calendar.get(Calendar.MILLISECOND)) + "[" + prefix + "]: " + msg;
+        return String.format("[%02d:%02d:%02d.%03d] ",calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),calendar.get(Calendar.SECOND),calendar.get(Calendar.MILLISECOND)) + "[" + prefix + "]: " + msg;
     }
 }

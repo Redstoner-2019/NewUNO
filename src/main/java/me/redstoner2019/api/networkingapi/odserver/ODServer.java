@@ -1,13 +1,13 @@
 package me.redstoner2019.api.networkingapi.odserver;
 
 import me.redstoner2019.api.networkingapi.defaultpackets.ACK;
-import me.redstoner2019.api.networkingapi.defaultpackets.ConnectRequestPacket;
 import me.redstoner2019.api.networkingapi.defaultpackets.ConnectSuccessPacket;
 import me.redstoner2019.api.networkingapi.defaultpackets.ConnectionRejectedPacket;
 import me.redstoner2019.api.networkingapi.events.ClientConnectEvent;
 import me.redstoner2019.api.networkingapi.events.PacketReadFailedEvent;
 import me.redstoner2019.api.networkingapi.util.ConnectionProtocol;
 import me.redstoner2019.api.networkingapi.util.Util;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -68,21 +68,37 @@ public class ODServer {
                         try {
                             ClientHandler handler = new ClientHandler(in,out,socket);
                             Object o = in.readObject();
-                            if(o instanceof ConnectRequestPacket p){
-                                if(p.getProtocol().equals(protocol)){
-                                    Util.log("Login validation complete");
-                                    clients.add(handler);
-                                    if(ODServer.getProtocol().equals(TCP)) handler.sendObject(new ACK(p.uuid,0));
-                                    handler.sendObject(new ConnectSuccessPacket());
-                                    clientConnectEvent.connectEvent(handler);
+
+                            if(o instanceof String){
+                                JSONObject packet = new JSONObject((String) o);
+                                if(!packet.has("header")) {
+                                    Util.log("Invalid login Request");
+                                    JSONObject object = new JSONObject();
+                                    object.put("header","invalid-login-request");
+                                    object.put("message","Invalid login request");
+                                    handler.sendObject(object.toString());
                                     return;
-                                } else {
-                                    Util.log("Incorrect Protocol " + p.getProtocol().name());
-                                    handler.sendObject(new ConnectionRejectedPacket("Incorrect Protocol"));
                                 }
-                            } else {
-                                Util.log("Invalid login Request");
-                                handler.sendObject(new ConnectionRejectedPacket("Invalid login request"));
+                                switch (packet.getString("header")){
+                                    case "connect-request": {
+                                        ConnectionProtocol prot = ConnectionProtocol.valueOf(packet.getString("protocol"));
+                                        if(prot.equals(protocol)){
+                                            Util.log("Login validation complete");
+                                            clients.add(handler);
+                                            //if(ODServer.getProtocol().equals(TCP)) handler.sendObject(new ACK(p.uuid,0)); TODO: reimplement
+                                            handler.sendObject(new ConnectSuccessPacket());
+                                            clientConnectEvent.connectEvent(handler);
+                                            return;
+                                        } else {
+                                            Util.log("Incorrect Protocol " + prot.name());
+                                            handler.sendObject(new ConnectionRejectedPacket("Incorrect Protocol"));
+                                        }
+                                        break;
+                                    }
+                                    case "ACK": {
+                                        break;
+                                    }
+                                }
                             }
                             handler.disconnect();
                         } catch (Exception e) {
