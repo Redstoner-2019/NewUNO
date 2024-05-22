@@ -1,10 +1,11 @@
 package me.redstoner2019.uno.client.gui.subguis;
 
-import me.redstoner2019.guiapi.GUI;
-import me.redstoner2019.guiapi.design.Design;
-import me.redstoner2019.guiapi.design.Setting;
+import me.redstoner2019.api.guiapi.GUI;
+import me.redstoner2019.api.guiapi.design.Design;
+import me.redstoner2019.api.guiapi.design.Setting;
 import me.redstoner2019.uno.client.ClientMain;
 import me.redstoner2019.uno.client.gui.Application;
+import me.redstoner2019.uno.client.networking.ClientConnector;
 import me.redstoner2019.uno.client.networking.LocalNetworkScanner;
 
 import javax.swing.*;
@@ -91,7 +92,7 @@ public class ServerMenu extends GUI {
         joinServer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Application.switchGui("lobby-selector");
+                ClientMain.connector.connect(servers.getSelectedValue(),8008);
             }
         });
         return this;

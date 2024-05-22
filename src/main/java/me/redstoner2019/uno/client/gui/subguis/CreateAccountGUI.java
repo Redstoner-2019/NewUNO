@@ -1,14 +1,16 @@
 package me.redstoner2019.uno.client.gui.subguis;
 
-import me.redstoner2019.guiapi.GUI;
-import me.redstoner2019.guiapi.design.Design;
-import me.redstoner2019.guiapi.design.Setting;
+import me.redstoner2019.api.guiapi.GUI;
+import me.redstoner2019.api.guiapi.design.Design;
+import me.redstoner2019.api.guiapi.design.Setting;
+import me.redstoner2019.uno.client.ClientMain;
 import me.redstoner2019.uno.client.gui.Application;
+import org.json.JSONObject;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 
 public class CreateAccountGUI extends GUI {
     public static JLabel title = new JLabel("Create Account");
@@ -45,12 +47,17 @@ public class CreateAccountGUI extends GUI {
         register(createAccountButton,new Setting(.3,.6,.4,.05));
         register(backButton,new Setting(.3,.675,.4,.05));
 
-        register(createStatus,new Setting(0,.75,1,.25));
+        registerNoDesign(createStatus,new Setting(0,.75,1,.25));
 
         Design.centerText(createStatus);
 
         Design.centerText(title);
         Design.setFontSize(title,50);
+
+        Design.setFontSize(username,20);
+        Design.setFontSize(displayname,20);
+        Design.setFontSize(password,20);
+        Design.setFontSize(confirmPassword,20);
 
         Design.setFontSize(usernameLabel,20);
         Design.setFontSize(displaynameLabel,20);
@@ -62,7 +69,25 @@ public class CreateAccountGUI extends GUI {
         createAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if(!ClientMain.authenticatorClient.isConnected()){
+                    createStatus.setForeground(Color.RED);
+                    createStatus.setText("Not connected to an authentication server!");
+                    return;
+                }
+                if(password.getText().equals(confirmPassword.getText())){
+                    JSONObject result = ClientMain.authenticatorClient.createAccount(username.getText(),displayname.getText(),password.getText());
+                    if(result.getString("data").equals("account-created")){
+                        createStatus.setForeground(Color.GREEN);
+                        createStatus.setText("Account created! You may now log in.");
+                    }
+                    if(result.getString("data").equals("account-already-exists")){
+                        createStatus.setForeground(Color.RED);
+                        createStatus.setText("This username is already in use.");
+                    }
+                } else {
+                    createStatus.setForeground(Color.RED);
+                    createStatus.setText("Passwords don't match!");
+                }
             }
         });
 

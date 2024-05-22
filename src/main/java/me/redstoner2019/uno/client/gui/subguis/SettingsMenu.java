@@ -1,9 +1,10 @@
 package me.redstoner2019.uno.client.gui.subguis;
 
-import me.redstoner2019.guiapi.GUI;
-import me.redstoner2019.guiapi.design.Design;
-import me.redstoner2019.guiapi.design.Setting;
+import me.redstoner2019.api.guiapi.GUI;
+import me.redstoner2019.api.guiapi.design.Design;
+import me.redstoner2019.api.guiapi.design.Setting;
 import me.redstoner2019.uno.Main;
+import me.redstoner2019.uno.client.ClientMain;
 import me.redstoner2019.uno.client.gui.Application;
 
 import javax.swing.*;
@@ -36,7 +37,7 @@ public class SettingsMenu extends GUI {
         register(loginAccount,new Setting(.1, .6, .2, .05));
         register(manageAccount,new Setting(.1, .7, .2, .05));
 
-        register(currentAuthServer,new Setting(.1, .4, .5, .05));
+        registerNoDesign(currentAuthServer,new Setting(.1, .4, .5, .05));
         register(newAuthServerIp,new Setting(.4, .5, .2, .05));
         register(setNewAuthServer,new Setting(.4, .6, .2, .05));
         register(connectToAuthServer,new Setting(.4, .7, .2, .05));
@@ -57,6 +58,46 @@ public class SettingsMenu extends GUI {
 
         Design.centerText(currentAuthServer);
         Design.setFontStyle(currentAuthServer, Font.PLAIN);
+
+        currentAuthServer.setForeground(Color.RED);
+
+        setNewAuthServer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentAuthServer.setText(newAuthServerIp.getText());
+                ClientMain.authenticatorClient.setAddress(newAuthServerIp.getText());
+                if(ClientMain.authenticatorClient.isConnected()){
+                    ClientMain.authenticatorClient.disconnect();
+                    currentAuthServer.setForeground(Color.RED);
+                }
+            }
+        });
+
+        connectToAuthServer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        connectToAuthServer.setEnabled(false);
+                        connectToAuthServer.setText("Connecting...");
+                        if(ClientMain.authenticatorClient.isConnected()){
+                            ClientMain.authenticatorClient.disconnect();
+                        }
+                        ClientMain.authenticatorClient.setup();
+                        if(ClientMain.authenticatorClient.isConnected()){
+                            currentAuthServer.setForeground(Color.GREEN);
+                        } else {
+                            currentAuthServer.setForeground(Color.RED);
+                        }
+                        connectToAuthServer.setEnabled(true);
+                        connectToAuthServer.setText("Connect to Auth Server");
+                    }
+                });
+                t.start();
+
+            }
+        });
 
         mainMenu.addActionListener(new ActionListener() {
             @Override

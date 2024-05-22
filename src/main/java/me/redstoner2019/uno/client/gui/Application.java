@@ -1,7 +1,7 @@
 package me.redstoner2019.uno.client.gui;
 
-import me.redstoner2019.guiapi.BoundsCreator;
-import me.redstoner2019.guiapi.GUI;
+import me.redstoner2019.api.guiapi.BoundsCreator;
+import me.redstoner2019.api.guiapi.GUI;
 import me.redstoner2019.uno.client.ClientMain;
 import me.redstoner2019.uno.client.gui.subguis.*;
 
@@ -30,6 +30,9 @@ public class Application {
         guis.put(name,gui);
         ClientMain.logger.log("Registered " + name);
         return true;
+    }
+    public static String getGUI(){
+        return currentGUI.getGUIName();
     }
     public static void switchGui(final String gui){
         currentGUI = guis.get(gui);
