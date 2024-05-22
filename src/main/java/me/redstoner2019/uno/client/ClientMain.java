@@ -2,13 +2,13 @@ package me.redstoner2019.uno.client;
 
 import me.redstoner2019.uno.Main;
 import me.redstoner2019.uno.client.gui.Application;
+import me.redstoner2019.uno.client.networking.ClientConnector;
 import me.redstoner2019.uno.plugin.Plugin;
-import me.redstoner2019.uno.plugin.events.LobbyCreateEvent;
 import me.redstoner2019.uno.util.Logger;
-import me.redstoner2019.uno.util.Player;
 
 public class ClientMain extends Plugin {
     public static Logger logger = new Logger("CLIENT");
+    public static ClientConnector connector = new ClientConnector();
     @Override
     public void onEnable() {
         Main.logger.log("Initializing Client");

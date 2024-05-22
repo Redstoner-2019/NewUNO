@@ -1,8 +1,8 @@
 package me.redstoner2019.uno.client.gui.subguis;
 
-import me.redstoner2019.guiapi.GUI;
-import me.redstoner2019.guiapi.design.Design;
-import me.redstoner2019.guiapi.design.Setting;
+import me.redstoner2019.api.guiapi.GUI;
+import me.redstoner2019.api.guiapi.design.Design;
+import me.redstoner2019.api.guiapi.design.Setting;
 import me.redstoner2019.uno.Main;
 import me.redstoner2019.uno.client.gui.Application;
 

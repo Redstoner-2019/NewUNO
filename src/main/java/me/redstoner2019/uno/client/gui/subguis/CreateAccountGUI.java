@@ -1,14 +1,13 @@
 package me.redstoner2019.uno.client.gui.subguis;
 
-import me.redstoner2019.guiapi.GUI;
-import me.redstoner2019.guiapi.design.Design;
-import me.redstoner2019.guiapi.design.Setting;
+import me.redstoner2019.api.guiapi.GUI;
+import me.redstoner2019.api.guiapi.design.Design;
+import me.redstoner2019.api.guiapi.design.Setting;
 import me.redstoner2019.uno.client.gui.Application;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 
 public class CreateAccountGUI extends GUI {
     public static JLabel title = new JLabel("Create Account");

@@ -1,8 +1,9 @@
 package me.redstoner2019.uno.client.gui.subguis;
 
-import me.redstoner2019.guiapi.GUI;
-import me.redstoner2019.guiapi.design.Design;
-import me.redstoner2019.guiapi.design.Setting;
+import me.redstoner2019.api.guiapi.GUI;
+import me.redstoner2019.api.guiapi.design.Design;
+import me.redstoner2019.api.guiapi.design.Setting;
+import me.redstoner2019.uno.client.ClientMain;
 import me.redstoner2019.uno.client.gui.Application;
 
 import javax.swing.*;
@@ -58,7 +59,7 @@ public class LobbySelector extends GUI {
         disconnectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Application.switchGui("server-menu");
+                ClientMain.connector.disconnect();
             }
         });
 
