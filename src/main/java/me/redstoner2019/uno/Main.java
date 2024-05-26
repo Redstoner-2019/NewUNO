@@ -6,7 +6,6 @@ import me.redstoner2019.uno.plugin.PluginUtils;
 import me.redstoner2019.uno.plugin.events.Event;
 import me.redstoner2019.uno.plugin.events.EventHandler;
 import me.redstoner2019.uno.plugin.events.Listener;
-import me.redstoner2019.uno.plugin.events.LobbyCreateEvent;
 import me.redstoner2019.uno.server.ServerMain;
 import me.redstoner2019.uno.util.Logger;
 import me.redstoner2019.uno.util.Util;
@@ -16,7 +15,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -83,10 +81,9 @@ public class Main {
 
         for(File f : Objects.requireNonNull(plugins.listFiles())){
             if(f.getName().endsWith(".jar")){
-                logger.log("Plugin " + f.getName() + " found.");
+                logger.log("Plugin " + f.getAbsoluteFile() + " found.");
                 try {
-                    //Reading plugin.json
-                    ClassLoader classLoader = new URLClassLoader(new URL[] { new URL("file:" + f.getAbsoluteFile()) });
+                    URLClassLoader classLoader = new URLClassLoader(new URL[] { new URL("jar:file:" + f.getAbsoluteFile() + "!/") });
                     InputStream inputStream = classLoader.getResourceAsStream("plugin.json");
                     if(inputStream == null){
                         logger.err("Couldn't load plugin, error reading plugin.json");
@@ -103,7 +100,7 @@ public class Main {
                 } catch (Exception e) {
                     logger.err(e.getLocalizedMessage());
                     logger.err(Util.stacktraceToString(e.getStackTrace()));
-                    logger.err("Plugin " + f.getName() + " failed to load.");
+                    logger.err("Plugin " + f.getAbsoluteFile() + " failed to load.");
                     continue;
                 }
                 logger.log("Plugin " + f.getName() + " successfully loaded.");

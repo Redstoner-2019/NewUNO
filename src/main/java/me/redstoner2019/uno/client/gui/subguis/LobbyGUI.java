@@ -51,6 +51,8 @@ public class LobbyGUI extends GUI {
         register(inputField, new Setting(.65,.9,.2,.05));
         register(sendButton, new Setting(.875,.9,.075,.05));
 
+        sendButton.setEnabled(false);
+
         leaveLobby.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

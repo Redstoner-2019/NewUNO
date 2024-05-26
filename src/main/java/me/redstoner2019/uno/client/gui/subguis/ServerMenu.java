@@ -92,7 +92,7 @@ public class ServerMenu extends GUI {
         joinServer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClientMain.connector.connect(servers.getSelectedValue(),8008);
+                ClientMain.connector.start(servers.getSelectedValue(),8008);
             }
         });
         return this;
