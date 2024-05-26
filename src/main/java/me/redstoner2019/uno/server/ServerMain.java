@@ -29,5 +29,8 @@ public class ServerMain extends Plugin {
         authenticatorClient.setAddress(authIP);
         authenticatorClient.setPort(authPort);
         authenticatorClient.setup();
+        if(!authenticatorClient.isConnected()){
+            Main.logger.err("Not connected to auth Server");
+        }
     }
 }

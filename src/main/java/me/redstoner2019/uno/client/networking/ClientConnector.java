@@ -53,7 +53,10 @@ public class ClientConnector extends ODClient {
                             if(packet.getString("data").equals("invalid-token")){
                                 ServerMenu.serverInfo.setText("Invalid Token. Check auth server and log in again.");
                                 disconnect();
-                            } else {
+                            } else if(packet.getString("data").equals("auth-failed")){
+                                ServerMenu.serverInfo.setText("Server failed to connect to auth server.");
+                                disconnect();
+                            }else {
                                 Application.switchGui("lobby-selector");
                             }
                             break;
