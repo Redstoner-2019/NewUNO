@@ -3,7 +3,10 @@ package me.redstoner2019.uno.client.gui.subguis;
 import me.redstoner2019.api.guiapi.GUI;
 import me.redstoner2019.api.guiapi.design.Design;
 import me.redstoner2019.api.guiapi.design.Setting;
+import me.redstoner2019.uno.client.ClientMain;
 import me.redstoner2019.uno.client.gui.Application;
+import me.redstoner2019.uno.client.networking.ClientConnector;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -52,6 +55,15 @@ public class LobbyGUI extends GUI {
         register(sendButton, new Setting(.875,.9,.075,.05));
 
         sendButton.setEnabled(false);
+
+        startGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JSONObject packet = new JSONObject();
+                packet.put("header","start-lobby");
+                ClientMain.connector.sendObject(packet.toString());
+            }
+        });
 
         leaveLobby.addActionListener(new ActionListener() {
             @Override
